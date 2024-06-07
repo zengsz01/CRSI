@@ -1,0 +1,98 @@
+<comment>
+problem   = Shock acceleration with a reflecting wall
+reference = Xue-Ning Bai, et al ApJ, vol. 809, pp. 55 (2015)
+configure = --prob reflect_shock -b --p charged
+
+<job>
+problem_id = reflect_shock      # problem ID: basename of output filenames
+
+<output1>
+file_type  = hst       # History data dump
+dt         = 1.0       # time increment between outputs
+
+<output2>
+file_type = hdf5       # HDF5 data dump
+variable  = prim       # variables to be output
+id        = prim       # part of filename
+dt        = 10.0      # time increment between outputs
+
+<output3>
+file_type   = bin       # Tabular data dump
+variable    = prim      # variables to be output
+dt          = 100.0     # time increment between outputs
+
+<output4>
+file_type  = rst        # restart dump
+dt         = 5.0e2      # time increment between outputs
+
+<time>
+cfl_number = 0.3       # The Courant, Friedrichs, & Lewy (CFL) Number
+nlim       = -1       # cycle limit
+tlim       = 900.0    # time limit
+integrator  = vl2      # time integration algorithm
+xorder      = 2        # order of spatial reconstruction
+ncycle_out  = 10      # interval for stdout summary info
+
+<mesh>
+nx1        = 3000     # Number of zones in X1-direction
+x1min      = -18000    # minimum value of X1
+x1max      = 18000     # maximum value of X1
+ix1_bc     = reflecting   # inner-X1 boundary flag
+ox1_bc     = outflow   # outer-X1 boundary flag
+
+nx2        = 260       # Number of zones in X2-direction
+x2min      = -1560     # minimum value of X2
+x2max      = 1560      # maximum value of X2
+ix2_bc     = periodic  # inner-X2 boundary flag
+ox2_bc     = periodic  # outer-X2 boundary flag
+
+nx3        = 1        # Number of zones in X3-direction
+x3min      = -2.0      # minimum value of X3
+x3max      = 2.0       # maximum value of X3
+ix3_bc     = periodic  # inner-X3 boundary flag
+ox3_bc     = periodic  # outer-X3 boundary flag
+
+num_threads = 2        # maximum number of OMP threads
+refinement  = adaptive # AMR
+numlevel       = 3     # level to refine
+derefine_count = 5     # derefine_count
+
+<meshblock>
+nx1        = 20       # Number of zones in X1-direction
+nx2        = 20       # Number of zones in X2-direction
+nx3        = 1        # Number of zones in X3-direction
+
+<hydro>
+gamma = 1.666666666666667 # gamma = C_p/C_v
+iso_sound_speed = 1.2909944487358056283930884665941  # isothermal sound speed
+dfloor = 1.0e-6              # floor on density rho
+pfloor = 1.0e-10             # floor on gas pressure p_gas
+
+<analysis>
+enable = true    # whether do analysis in Mesh::UserWorkInLoop()
+npbin = 200      # number of bin in the mometum axis
+nxbin = 1500     # number of bin in the x-direction
+dt    = 10.0     # time increment between outputs
+E_max = 2.0e3    # upper limit for particle spectrum
+
+<particles>
+cfl_par = 0.4          # how many cells particle move each time step
+cfl_rot = 0.3          # the angle that particle rotate each time step
+backreaction = true    # turn on/off the back reaction of the gas drag
+delta_f_enable = false # turn on/off the delta f method
+mass = 0.01            # mass of each particles
+charge_over_mass_over_c = 1.0       # charge of each particles
+speed_of_light = 10000.0  # speed of light which only used in particle module
+
+<problem>
+pres  = 1.0           # pressure
+b_guide  = 1.0        # guiding B field
+ang   = 0.0           # parallel shock
+v_pert  = 0.0         # perturbation for the velocity, in the perpendicular directions
+v_upstrm = 30         # upstream veloctiy
+CR_frac = 0.001       # ratio between CR and gas
+ECR_inj  = 10.0       # ratio between injected CRs' initial energy and shock kinetic energy
+E_th  = 1.0           # Absorbing the CRs whose energy is lower than E_th
+T_remove  = 45.0      # Before T_remove, CRs are considered to be more likely free streaming
+random_seed = 1       # random seed for the pgen
+

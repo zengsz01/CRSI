@@ -1,0 +1,107 @@
+<comment>
+problem   = Gyro Resonance Instability
+reference =  X.-N.Bai+, ApJ, vol. 876, pp.60- (2019)
+configure = --prob gyro_resonace -b --p charged --flux roe --nghost 4 --coord expanding
+
+<job>
+problem_id = expanding # problem ID: basename of output filenames
+
+<output1>
+file_type  = hst       # History data dump
+dt         = 5.0       # time increment between outputs
+
+<output2>
+file_type  = bin       # Binary data dump
+variable   = prim      # variables to be output
+dt         = 1.0e3     # time increment between outputs
+
+<output3>
+file_type  = vtk       # Binary data dump
+variable   = prim      # variables to be output
+dt         = 1.0e2     # time increment between outputs
+
+<output4>
+file_type  = rst        # restart dump
+dt         = 2.0e3      # time increment between outputs
+
+<time>
+cfl_number = 0.3       # The Courant, Friedrichs, & Lewy (CFL) Number
+nlim       = -1        # cycle limit
+tlim       = 1.0e4     # time limit
+integrator  = vl2      # time integration algorithm
+xorder      = 3        # order of spatial reconstruction
+ncycle_out  = 5000     # interval for stdout summary info
+
+<mesh>
+nx1        = 4800       # Number of zones in X1-direction
+x1min      = -48000     # minimum value of X1
+x1max      = 48000      # maximum value of X1
+ix1_bc     = periodic  # inner-X1 boundary flag
+ox1_bc     = periodic  # outer-X1 boundary flag
+
+nx2        = 1         # Number of zones in X2-direction
+x2min      = -2.5      # minimum value of X2
+x2max      = 2.5       # maximum value of X2
+ix2_bc     = periodic  # inner-X2 boundary flag
+ox2_bc     = periodic  # outer-X2 boundary flag
+
+nx3        = 1         # Number of zones in X3-direction
+x3min      = -2.5      # minimum value of X3
+x3max      = 2.5       # maximum value of X3
+ix3_bc     = periodic  # inner-X3 boundary flag
+ox3_bc     = periodic  # outer-X3 boundary flag
+
+num_threads = 1        # maximum number of OMP threads
+refinement  = none     # static, none, adaptive
+
+<meshblock>
+nx1        = 20        # Number of zones in X1-direction
+nx2        = 1         # Number of zones in X2-direction
+nx3        = 1         # Number of zones in X3-direction
+
+<hydro>
+gamma = 1.666666666666667 # gamma = C_p/C_v
+iso_sound_speed = 1.0     # isothermal sound speed
+
+<coord>
+dot_a1  = 0.0          # expanding factor in x dir
+dot_a2  = 0.000002       # expanding factor in y dir
+dot_a3  = 0.000002       # expanding factor in z dir
+
+<particles0>
+cfl_par = 0.4          # how many cells particle move each time step
+cfl_rot = 0.1          # the angle that particle rotate each time step
+backreaction = true    # turn on/off the back reaction of the gas drag
+delta_f_enable = true  # turn on/off the delta f method
+phase_random = true    # turn on/off to randomize phase
+
+<analysis>
+enable = true    # whether do analysis in Mesh::UserWorkInLoop()
+npbin = 250      # number of bin in the mometum axis
+ntbin = 100      # number of bin in the pitch angle axis
+dt    = 1.0e2    # time increment between outputs
+
+<problem>
+b_par   = 1.0         # B parallel
+amp  = 0.001          # B perpendicular
+pres    = 0.6         # pressure
+vdft    = 0.0         # CR's drift velocity
+option  = 1           # 1: random wave perturbation with input spectrum; 2: single left forward wave; 3 random left forward wave with input spectrum
+ang_2   = 0.0         # rotation of k around x2 axis
+ang_3   = 0.0         # rotation of k around x3 axis
+turbulence_index = -1 # initial power spectrum index
+particle_bin = 8      # types of particles
+npx1 = 1228800         # number of particles in the X1 direction
+npx2 = 1              # number of particles in the X2 direction
+npx3 = 1              # number of particles in the X3 direction
+kappa = 1.75          # power index of particle distribution
+p0 = 300.0            # parameter in the kappa distribution
+m_CR = 0.0001         # particle total mass
+charge_over_mass_over_c = 1.0 # charge over mass ratio
+speed_of_light = 300.0 # numerical speed of light for particles
+random_seed = 1       # random seed for the pgen  
+adaptive_delta_f_method = false # turn on/off the adaptive delta f method
+cr_beta = 1.0         # initial anisotropy level
+adaptive_delta_f_interval = 5.0e5  # time interval to update f0
+
+
